@@ -3,6 +3,7 @@ package pkg
 import (
 	"fmt"
 
+	"github.com/laveeshb/youtube-cli/internal/auth"
 	"github.com/spf13/cobra"
 )
 
@@ -15,8 +16,7 @@ var authLoginCmd = &cobra.Command{
 	Use:   "login",
 	Short: "Log in to your Google account via OAuth",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		fmt.Println("Auth login: not yet implemented")
-		return nil
+		return auth.Login()
 	},
 }
 
@@ -24,7 +24,15 @@ var authStatusCmd = &cobra.Command{
 	Use:   "status",
 	Short: "Show current authentication status",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		fmt.Println("Auth status: not yet implemented")
+		status, err := auth.Status()
+		if err != nil {
+			return err
+		}
+		if !status.LoggedIn {
+			fmt.Println("Not logged in. Run 'yt auth login' to authenticate.")
+			return nil
+		}
+		fmt.Printf("Logged in\nToken expires: %s\n", status.Expiry.Local().Format("2006-01-02 15:04:05"))
 		return nil
 	},
 }
@@ -33,7 +41,10 @@ var authLogoutCmd = &cobra.Command{
 	Use:   "logout",
 	Short: "Log out and remove stored credentials",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		fmt.Println("Auth logout: not yet implemented")
+		if err := auth.Logout(); err != nil {
+			return err
+		}
+		fmt.Println("Logged out.")
 		return nil
 	},
 }
