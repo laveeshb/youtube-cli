@@ -188,4 +188,4 @@ If you manage more than one YouTube channel (e.g. a personal channel and a Brand
 - `yt` and `youtube` are identical — use whichever you prefer
 - All credentials are stored locally on your machine and never shared
 - The Google app stays in Testing mode — only you can authorize it
-- YouTube only retains uploaded media metadata; the original files stay on your machine
+- youtube-cli does not keep a copy of your video files — the originals stay on your machine
